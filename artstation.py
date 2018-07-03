@@ -15,7 +15,7 @@ username="lownine"
 class Artstation():
     def __init__(self):
         self.urlbase="https://www.artstation.com/users/{0}/likes.json?page=".format(username)
-		#makes a download folder
+	#makes a download folder
         if not os.path.exists('Downloads'):
             os.mkdir('Downloads')
         self.get_project_url()
@@ -23,7 +23,7 @@ class Artstation():
     def get_project_url(self):
         self.randombase="https://www.artstation.com/users/{0}/random_projects.json?project_id={1}"
         self.sess = requests.Session()
-		    #prepare headers
+	#prepare headers
         #set this to your cookies
         cookies={}
         self.sess.headers.update(cookies)
@@ -36,7 +36,7 @@ class Artstation():
         number_on_page=len(data['data'])
         number_pages_to_parse=math.ceil(number_likes/number_on_page)
         
-		#go through all the likes and obtain the image urls
+	#go through all the likes and obtain the image urls
         for pages in range(number_pages_to_parse):
             page_request_data=self.sess.get(self.urlbase+str(pages), verify=False).json()['data']
             for like in page_request_data:
@@ -50,7 +50,7 @@ class Artstation():
                     p.terminate()
                     p.join()
                 
-	#downloads obtained images and saves them to the Downloads folder
+    #downloads obtained images and saves them to the Downloads folder
     def download(self, image):
         filename=image.split("/")[-1]
         if not os.path.exists(os.path.join('Downloads', filename)):

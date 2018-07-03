@@ -23,15 +23,16 @@ class Artstation():
     def get_project_url(self):
         self.randombase="https://www.artstation.com/users/{0}/random_projects.json?project_id={1}"
         self.sess = requests.Session()
+	
+	#put your cookies here
+	cookies={}
 	#prepare headers
-        #set this to your cookies
-        cookies={}
         self.sess.headers.update(cookies)
         self.sess.headers.update({'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"})
             
         request = self.sess.get(self.urlbase, verify=False)
         data = request.json()
-		#obtains the number of likes from the json 
+	#obtains the number of likes from the json 
         number_likes=data['total_count']
         number_on_page=len(data['data'])
         number_pages_to_parse=math.ceil(number_likes/number_on_page)
@@ -43,7 +44,7 @@ class Artstation():
                 artwork_link=like['permalink']
                 images = self.sess.get((artwork_link), verify=False).text
                 images=re.findall("(?<=\"image_url\\\\.:\\\\\").*?\.jpg", images)
-				#if there are multiple images download them simultaneously
+		#if there are multiple images download them simultaneously
                 if len(images)>0:
                     p=Pool(len(images))
                     p.map(self.download, images)
